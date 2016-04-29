@@ -1,0 +1,16 @@
+Python
+------
+https://appmecha.wordpress.com/2008/11/08/variable-url-parameters/
+https://docs.python.org/2/tutorial/modules.html
+Bootstrap
+---------
+Google Maps
+------ ----
+https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+REST
+----
+http://www.desarrolloweb.com/articulos/funcion-get-jquery-ajax.html
+http://rest.elkstein.org/
+MongoDB
+-------
+https://docs.mongodb.org/manual/tutorial/query-a-2dsphere-index/
