@@ -114,7 +114,6 @@
             async defer></script>
     <script>
       
-      
       function AutoCenter() { //Call it to automatically center and zoom the map to show all markers in the markers[]
 		//  Create a new viewpoint bound
 		var bounds = new google.maps.LatLngBounds();
@@ -125,7 +124,6 @@
 		//  Fit these bounds to the map
 		map.fitBounds(bounds);
 	 }
-      
       
       function updateLocation(map, geocoder) {
         var latlng = map.getCenter();
