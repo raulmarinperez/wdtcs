@@ -113,6 +113,20 @@
     <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
             async defer></script>
     <script>
+      
+      
+      function AutoCenter() { //Call it to automatically center and zoom the map to show all markers in the markers[]
+		//  Create a new viewpoint bound
+		var bounds = new google.maps.LatLngBounds();
+		//  Go through each...
+		$.each(markers, function (index, marker) {
+		bounds.extend(marker.position);
+		});
+		//  Fit these bounds to the map
+		map.fitBounds(bounds);
+	 }
+      
+      
       function updateLocation(map, geocoder) {
         var latlng = map.getCenter();
         var latlng_shortened = "("+parseFloat(latlng.lng()).toFixed(3)+","+parseFloat(latlng.lat()).toFixed(3)+")";
@@ -180,10 +194,10 @@
           
           var moreShipInfo = '<div> lat: ' + shipInfo.location[1] +  ', lon: ' + shipInfo.location[1] + '</div>'; //We need shipInfo to contain the route, Owner and the other fields you want to include
           
-          marker.html = moreShipInfo;
+          marker.infoWin = moreShipInfo; //Adding the infoWindow html to the marker itself
           
           marker.addListener('click', function() {
-          	infoWindow.setContent(this.html)
+          	infoWindow.setContent(this.infoWin) //setting the infoWindow content using the marker html
           	infoWindow.open(map, this);
   			});
           
