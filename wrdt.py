@@ -26,6 +26,10 @@ if __name__ == '__main__':
     conf = { '/': { 'tools.sessions.on': True,
                     'tools.response_headers.on': True,
                     'tools.staticdir.root': os.path.abspath(os.getcwd())+'/web' },
+             '/js': { 'tools.staticdir.on': True,
+                      'tools.staticdir.dir': './js' },
+             '/css': { 'tools.staticdir.on': True,
+                       'tools.staticdir.dir': './css' },
              '/img': { 'tools.staticdir.on': True,
                        'tools.staticdir.dir': './img' }
            }
