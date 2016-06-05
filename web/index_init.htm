@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
+          crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap-combobox.css">
+    <style>
+      #infopanel {
+        min-height: 400px;
+        max-height: 400px;
+      }
+      #map {
+        width: 500px;
+        height: 400px;
+      }
+      .full-height {
+        min-height: 329px;
+        max-height: 329px;
+        overflow: auto;
+      }
+    </style>
+  </head
+  <body>
+
+    <!--Primer Contenerdor logo Google y botón Crear cuenta-->  
+    <div class="container-fluid well">
+      <div class="row">
+        <!--Columna logo con imágen responsive-->
+        <div class="col-md-3 col-lg-3 text-center">
+          <img src="img/wryd_logo.png">
+        </div>
+        <div class="col-md-4 col-lg-4 text-center">
+          <img src="img/wd_logo.png">
+        </div>
+       <!--columna link y boton solo son visibles en sm md lg-->
+        <div class="col-md-3 col-md-offset-1 col-lg-3 col-lg-offset-1 text-center">
+          <img src="img/powered-by-mongodb.png">
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenedor para la info -->
+    <div class="container-fluid">
+      <div class="row">
+        <div id="map-location" class="col-xs-5 col-sm-5 col-md-5 col-lg-5 col-lg-offset-3 text-center">
+          <strong><span id="location_readable"><span></strong>: <span id="location"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenedor para el mapa -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3 col-lg-3">
+          <div class="panel panel-primary" id="infopanel">
+            <div class="panel-heading">Ships in scope</div>
+            <div class="panel-body">
+              <ul id="ships" class="list-group full-height">
+             </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <div id="map"></div>
+        </div>
+        <div class="col-md-3 col-lg-3 col-lg-offset-1">
+          <div class="panel panel-primary" id="infopanel">
+            <div class="panel-heading">Ship's cargo</div>
+            <div class="panel-body">
+              <ul id="containers" class="list-group full-height">
+             </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenedor para interacción -->
+    <div class="container-fluid">
+      <div class="row" style="visibility:hidden">
+        <div class="col-lg-2 col-lg-offset-3 text-right"> <h4>Select sea:</h4> </div>
+        <div class="col-lg-2"> 
+          <select id="sea_in" class="combobox">
+            <option></option>
+            <option value="Biscay">Bay of Biscay</option>
+            <option value="Medi">Mediterranean Sea</option>
+            <option value="North">North Atlantic Ocean</option>
+            <option value="Caribbean">Caribbean  Sea</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2 col-lg-offset-3 text-right"> <h4>Targeted content:</h4> </div>
+        <div class="col-lg-2 text-center"> 
+            <input id="contents_in" type="text" class="form-control" placeholder="enumerate contents to search" aria-describedby="basic-addon2">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2 col-lg-offset-5 text-right"> 
+          <button id="okbtn" type="button" class="btn btn-primary">Search</button>
+        </div>
+      </div>
+    </div>
+ 
+   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+            crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+            async defer></script>
+    <script src="js/bootstrap-combobox.js"></script>
+    <script>
+      function updateLocation(map, geocoder, markers, visibleShips) {
+        var latlng = map.getCenter();
+        var latlng_shortened = "("+parseFloat(latlng.lng()).toFixed(3)+","+parseFloat(latlng.lat()).toFixed(3)+")";
+        var bounding_box = map.getBounds();
+        var contents = $('#contents_in').val(); //textbox
+        var sea = $('#sea_in option:selected').val(); //combobox
+    
+        // Update label over the map
+        geocoder.geocode({'location': latlng}, function(results, status) {
+           if (status === google.maps.GeocoderStatus.OK) {
+             if (results[1]) {
+               $('#location_readable').text(results[1].formatted_address);
+               $('#location').text(latlng_shortened);
+             } else {
+               $('#location_readable').text("Destination unknown");
+               $('#location').text(latlng_shortened);
+             }
+           }
+         });
+         // Update ships in the scope box and map
+         if (typeof bounding_box != 'undefined')
+           getShipsInfo(map,bounding_box.getNorthEast(),bounding_box.getSouthWest(),
+                        contents,sea,markers,visibleShips);
+      }
+
+      // call the backend to get the ships within the bounding box
+      function getShipsInfo(map,bb_ne,bb_sw,contents,sea,markers,visibleShips) {
+        var data={bb_ne:JSON.stringify([bb_ne.lng(),bb_ne.lat()]),
+                  bb_sw:JSON.stringify([bb_sw.lng(),bb_sw.lat()]),
+                  contents:contents, sea:sea}
+        // call the backend
+        $.get("containers", data, function(response) { 
+          // update the GUI
+          placeShips(map, markers, visibleShips, JSON.parse(response)); 
+        });
+
+      }
+
+      // Update the GUI with new ships in scope.
+      function placeShips(map, markers, visibleShips, shipsInfo) {
+        // clean up
+        clearMarkers_n_VisibleShips(markers, visibleShips); $("#ships").empty(); $("#containers").empty();
+        // initialize
+        var infoWindow = new google.maps.InfoWindow({ content: 'Nothing' });
+        // fill out
+        shipsInfo.forEach(function(shipInfo, index){
+          var shipLocation = {lat: shipInfo._id.location.coordinates[1], lng: shipInfo._id.location.coordinates[0]};
+          var infoWindowContents = {ship: shipInfo._id.ship,
+                                    lat: shipInfo._id.location.coordinates[0], lng: shipInfo._id.location.coordinates[1],
+                                    origin_country:shipInfo._id.route.origin.Country,  origin_city:shipInfo._id.route.origin.Name, 
+                                    destination_country:shipInfo._id.route.destination.Country, destination_city:shipInfo._id.route.destination.Name};
+          var marker = new google.maps.Marker({ position: shipLocation, map: map, custom: 'custom field',
+                                                icon: 'img/ship.png' });
+          $('ul#ships').append('<li shipnum="' + index + '" class="list-group-item">' + shipInfo._id.ship+'</li>');
+          // infoWindow setup
+          var moreShipInfo = '<div> <strong>ship: ' + infoWindowContents.ship + ' </strong> <br/>'+
+                                    '<strong>lat:</strong> ' + infoWindowContents.lat +  ', <strong>lon:</strong> ' + infoWindowContents.lng + '<br/>'+
+                                    '<strong>origin:</strong> '+infoWindowContents.origin_city+'('+infoWindowContents.origin_country+') <br/>'+
+                                    '<strong>destination:</strong> '+infoWindowContents.destination_city+'('+infoWindowContents.destination_country+')</div>'; 
+          marker.infoWin = moreShipInfo;
+          marker.addListener('click', function() {
+          	infoWindow.setContent(this.infoWin)
+          	infoWindow.open(map, this);
+  			});
+
+          markers.push(marker);
+          visibleShips.push(shipInfo);
+        });
+        $('ul#ships').delegate('li', 'click', function (e) {selectShip(e, markers, visibleShips)});
+      }
+
+      // Remove all markers from the map.
+      function clearMarkers_n_VisibleShips(markers, visibleShips) {
+        markers.forEach(function(marker, index) {
+          marker.setMap(null);
+        });
+        markers.length=0;
+        visibleShips.length=0;
+      }
+
+      // The user clicks on a ship from the left panel
+      function selectShip(e, markers, visibleShips) {
+        // Set previous ship to non-active
+        var activeShip = $("ul#ships li.active");
+        if (activeShip.length) {
+          var marker = markers[parseInt(activeShip.attr('shipnum'))];
+          marker.setIcon('http://mythings:8080/img/ship.png');
+          activeShip.removeClass("active");
+        }
+        // Set current ship to active
+        var activeShipNum = parseInt($(e.target).attr('shipnum'));
+        var marker = markers[activeShipNum];
+        $(e.target).addClass("active");
+        marker.setIcon('http://mythings:8080/img/ship_selected.png');
+        showShipsContainersCargo(visibleShips, activeShipNum);
+      }
+
+     // Display ship's cargo
+     function showShipsContainersCargo(visibleShips, shipNum) {
+        $('ul#containers').empty()
+        var cargo = visibleShips[shipNum].cargo;
+        cargo.forEach(function(i_cargo, index) {
+          $('ul#containers').append('<li class="list-group-item">' + i_cargo.type +' ( ' + i_cargo.Tons + 'T )</li>');
+        });
+      }
+
+      function initMap() {
+        var mapDiv = document.getElementById('map');
+        var map = new google.maps.Map(mapDiv, { center: {lat: 36.125265, lng: -5.437877},
+                                            zoom: 14 });
+        var visibleShips = [];
+        var markers = [];
+        var geocoder = new google.maps.Geocoder;
+
+        // GUI setup
+
+        // GUI components initialization
+        updateLocation(map,geocoder,markers,visibleShips);
+        // Listeners - any change will update the GUI
+        map.addListener('center_changed', function() {updateLocation(map,geocoder,markers,visibleShips);});
+        $('#okbtn').on('click', function(event) {updateLocation(map,geocoder,markers,visibleShips);});
+        $('#sea_in').combobox();
+        $("#sea_in" ).change(function() {updateLocation(map,geocoder,markers,visibleShips);});
+      }     
+    </script>
+   </body>
+</html>
+
