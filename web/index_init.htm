@@ -207,14 +207,14 @@
         var activeShip = $("ul#ships li.active");
         if (activeShip.length) {
           var marker = markers[parseInt(activeShip.attr('shipnum'))];
-          marker.setIcon('http://mythings:8080/img/ship.png');
+          marker.setIcon('img/ship.png');
           activeShip.removeClass("active");
         }
         // Set current ship to active
         var activeShipNum = parseInt($(e.target).attr('shipnum'));
         var marker = markers[activeShipNum];
         $(e.target).addClass("active");
-        marker.setIcon('http://mythings:8080/img/ship_selected.png');
+        marker.setIcon('img/ship_selected.png');
         showShipsContainersCargo(visibleShips, activeShipNum);
       }
 
