@@ -4,7 +4,7 @@ WDTCS is a simple demo to show MongoDB's geospatial capabilities. In order to ma
 The following are the three main components:
 
 - **MongoDB backend -** the data folder contains a dump of the database. The database's name is WDTCS and has five collections (only three of them are used at the time of writing): containers, countries, oceans, ports and ships. The containers and ships collections have one 2dsphere index each one.
-- **Web server/REST API -** to facilitate its deployment and usage, the web server and a light REST API layer have been developed using CherryPy(http://www.cherrypy.org/).
+- **Web server/REST API -** to facilitate its deployment and usage, the web server and a light REST API layer have been implemented using CherryPy(http://www.cherrypy.org/).
 - **Front-end -** a very simple front-end (hey! we're engineers, don't expect a super-duper interface) displaying a small map, a couple of panels and a textbox + a combobox for filtering. It uses jQuery, Bootstrap and the Google Maps API.
 
 To make it work you just have to clone the repo, satisfy the dependencies (Python + CherryPy, front-end dependencies are included) and start up the server by issuing the following command line:
@@ -31,8 +31,8 @@ The following actions are currently implemented:
 
 - **Zoom in and out the map -** zoom out to cover more area and display ships available.
 - **Get ship's info -** click markers to retrieve information from ships.
-- **Get ship's cargo -** click ship's name from the left panel to get ship's cargo. This info will be displayed in the right panel.
-- **Filter ships by content/cargo -** provide the cargo type you want to filter by. More than one cargo type can be specified by separating them by commas (it will perform an OR query). If, for some reason ;), you want to know which ships are carrying out Gold and Uranium, just type `Gold,Uranium` in the contents text box.
+- **Get ship's cargo -** click ship's name from the left panel to get ship's cargo. This info is displayed in the right panel.
+- **Filter ships by content/cargo -** provide the cargo type you want to filter by. More than one cargo type can be specified by separating them by commas (it will perform an OR query). If, for some reason ;), you want to know which ships are carrying out Gold or Uranium (or both), just type `Gold,Uranium` in the contents text box.
 - **Filter ships by sea -** choose the sea that will filter the ships within the map. At the moment only North Atlantic and Caribbean sea display ships.
 - **Filter ships by sea and content/cargo -** just use the two previous filtering options at a time.
 
