@@ -1,0 +1,16 @@
+
+*.pid
+
+*.swp
+
+data/mongod.conf
+
+data/mongod.log
+
+lib/__init__.pyc
+
+*.pyc
+
+logs/wdtcs_apisrv.log
+
+logs/wdtcs_websrv.log
