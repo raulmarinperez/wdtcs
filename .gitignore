@@ -14,3 +14,13 @@ lib/__init__.pyc
 logs/wdtcs_apisrv.log
 
 logs/wdtcs_websrv.log
+
+data/dbpath
+
+data/dump 2.zip
+
+doc/use-cases.txt
+
+lib/__init__.py
+
+lib/__init__.pyc
